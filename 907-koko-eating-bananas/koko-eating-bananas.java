@@ -38,6 +38,7 @@ class Solution {
 
             if(piles[i] > mid){
                 hours += (int)Math.ceil((double)piles[i]/mid);
+                if(hours > hour) return false;
             }
             else{
                 hours += i + 1;
