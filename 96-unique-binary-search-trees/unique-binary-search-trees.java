@@ -1,5 +1,10 @@
 class Solution {
+    Integer dp[][];
+
     public int numTrees(int n) {
+
+        dp = new Integer[n + 1][n + 1];
+
         return partition(1,n);
     }
 
@@ -9,6 +14,8 @@ class Solution {
 
         int ans = 0;
 
+        if(dp[start][end] != null) return dp[start][end];
+
         for(int i = start; i <= end; i++){
 
             int left = partition(start, i - 1);
@@ -17,6 +24,6 @@ class Solution {
             ans += left * right;
         }
 
-        return ans;
+        return dp[start][end] = ans;
     }
 }
