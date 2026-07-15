@@ -1,48 +1,38 @@
 class Solution {
+    Integer dp[][];
     public int splitArray(int[] nums, int k) {
-        
-        long sum = 0;
-        int max = 0;
-        
-        for(int i = 0; i < nums.length; i++) {sum += nums[i];max = Math.max(max, nums[i]);}
 
-        return search((long)max, sum, nums, k);
+        dp = new Integer[k + 1][nums.length + 1];
+        return help(nums,k, 0);
     }
+ 
+    public int help(int[] nums, int k, int index){
 
-    public int search(long left, long right, int[] nums, int k){
-
-        while(left <= right){
-
-            long mid = left + (right - left)/2;
-
-            if(canDo(nums, mid, k)){
-                right = mid - 1;
-            }
-            else{
-                left = mid + 1;
-            }
-
+        if(index == nums.length){
+            if(k > 1) return Integer.MIN_VALUE;
         }
 
-        return (int)left;
-    }
+        if(dp[k][index] != null) return dp[k][index];
 
-    public boolean canDo(int[] nums, long mid, int k){
+        if(k == 1){
+            int sum = 0;
 
-        long container = 0;
-        int count = 1;
-
-        for(int i = 0; i < nums.length; i++){
-
-            if(nums[i] + container > mid){
-                count++;
-                if(count > k) return false;
-                container = 0;
+            for(int i = index; i < nums.length; i++){
+                sum += nums[i];
             }
 
-            container += nums[i];
+            return dp[k][index] = sum;
         }
 
-        return count <= k;
+        int sum = 0;
+        int min = Integer.MAX_VALUE;
+
+        for(int i = index; i < nums.length; i++){
+            sum += nums[i];
+
+            min = Math.min(min, Math.max(sum, help(nums, k - 1, i + 1)));
+        }
+
+        return dp[k][index] = min;
     }
 }
