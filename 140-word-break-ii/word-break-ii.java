@@ -1,36 +1,46 @@
 class Solution {
-    List<String> ls;
+
     HashSet<String> hs;
+    List<String>[] dp;
+
     public List<String> wordBreak(String s, List<String> wordDict) {
-        
-        hs = new HashSet<>();
-        ls = new ArrayList<>();
 
-        for(String st : wordDict){
-            hs.add(st);
-        }
+        hs = new HashSet<>(wordDict);
+        dp = new ArrayList[s.length() + 1];
 
-        help(s, 0, "");
-
-        return ls;
+        return help(s, 0);
     }
 
-    public void help(String s, int index, String res){
+    public List<String> help(String s, int index) {
 
-        if(index == s.length()){
-            String r = res.substring(0, res.length() - 1);
-            ls.add(r);
-            return;
+        if (dp[index] != null)
+            return dp[index];
+
+        List<String> ans = new ArrayList<>();
+
+        if (index == s.length()) {
+            ans.add("");
+            return dp[index] = ans;
         }
 
-        for(int i = index; i < s.length(); i++){
+        for (int i = index; i < s.length(); i++) {
 
-            String ans = s.substring(index, i + 1);
+            String word = s.substring(index, i + 1);
 
-            if(hs.contains(ans)){
-                help(s, i + 1, res + ans + " ");
+            if (hs.contains(word)) {
+
+                List<String> suffix = help(s, i + 1);
+
+                for (String str : suffix) {
+
+                    if (str.equals(""))
+                        ans.add(word);
+                    else
+                        ans.add(word + " " + str);
+                }
             }
-
         }
-    } 
+
+        return dp[index] = ans;
+    }
 }
