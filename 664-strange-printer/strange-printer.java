@@ -1,36 +1,24 @@
 class Solution {
-    private Integer[][] memo;
-    private String s;
-
+    Integer dp[][];
     public int strangePrinter(String s) {
-        int n = s.length();
-        if (n == 0) return 0;
 
-        this.s = s;
-        this.memo = new Integer[n][n];
-
-        return solve(0, n - 1);
+        dp = new Integer[s.length()][s.length()];
+        
+        return help(s, 0, s.length() - 1);
     }
 
-    private int solve(int i, int j) {
+    public int help(String s, int i, int j){
 
-        if (i > j) return 0;
+        if(i == j) return 1;
 
+        if(dp[i][j] != null) return dp[i][j];
 
-        if (i == j) return 1;
+        int min = Integer.MAX_VALUE;
 
-        if (memo[i][j] != null) return memo[i][j];
-
-        int best = solve(i, j - 1) + 1;
-
-        for (int k = i; k < j; k++) {
-            if (s.charAt(k) == s.charAt(j)) {
-                int candidate = solve(i, k) + solve(k + 1, j - 1);
-                best = Math.min(best, candidate);
-            }
+        for(int k = i; k < j; k++){
+            min = Math.min(min, help(s, i, k) + help(s, k + 1, j));
         }
 
-        memo[i][j] = best;
-        return best;
+        return dp[i][j] = (s.charAt(i) == s.charAt(j))? min - 1:min;
     }
 }
