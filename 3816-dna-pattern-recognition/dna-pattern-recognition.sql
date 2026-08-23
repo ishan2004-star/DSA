@@ -28,4 +28,5 @@ select sample_id, dna_sequence,  species,
         else 0
     end
 ) as has_ggg
-from Samples;
+from Samples
+order by sample_id asc;
