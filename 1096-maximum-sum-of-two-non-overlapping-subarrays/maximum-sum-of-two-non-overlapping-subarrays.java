@@ -1,7 +1,7 @@
 class Solution {
-    Integer dp[][][];
+    Integer dp[][];
     public int maxSumTwoNoOverlap(int[] nums, int firstLen, int secondLen) {
-        dp = new Integer[nums.length][2][2];
+        dp = new Integer[nums.length][3];
 
         return help(nums, firstLen, secondLen, 0);
     }
@@ -12,10 +12,19 @@ class Solution {
 
         if(firstlen == 0 && secondlen == 0) return 0;
 
-        int len1 = firstlen > 0? 0:1;
-        int len2 = secondlen > 0? 0:1;
+        int len = -1;
 
-        if(dp[index][len1][len2] != null) return dp[index][len1][len2];
+        if(firstlen == 0 && secondlen > 0){
+            len = 0;
+        }
+        else if(firstlen > 0 && secondlen > 0){
+            len = 1;
+        }
+        else if(firstlen > 0 && secondlen == 0){
+            len = 2;
+        }
+
+        if(dp[index][len] != null) return dp[index][len];
 
 
          int pick_first = 0;
@@ -44,6 +53,6 @@ class Solution {
         // skip
         int skip = help(nums, firstlen, secondlen, index + 1);
 
-        return dp[index][len1][len2] = Math.max(skip, Math.max(pick_first, pick_second));
+        return dp[index][len] = Math.max(skip, Math.max(pick_first, pick_second));
     }
 }
